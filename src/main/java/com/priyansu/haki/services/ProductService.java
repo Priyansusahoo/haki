@@ -66,14 +66,21 @@ public class ProductService {
      * @return Returns the updated Product object after it has been saved to the repository.
      * If the product with the given id does not exist, this method may throw a NoSuchElementException.
      */
-    public Product updateProduct(Long id,Product productDetails) {
+    public Optional<Product> updateProduct(Long id,Product productDetails) {
         Optional<Product> product = productRepository.findById(id);
 
-        product.get().setName(productDetails.getName());
-        product.get().setQuantity(productDetails.getQuantity());
-        product.get().setUnitPrice(productDetails.getUnitPrice());
+        if (product.isPresent()) {
+            Product productToUpdate = product.get();
 
-        return productRepository.save(product.get());
+            productToUpdate.setName(productDetails.getName());
+            productToUpdate.setQuantity(productDetails.getQuantity());
+            productToUpdate.setUnitPrice(productDetails.getUnitPrice());
+
+            return Optional.of(productRepository.save(productToUpdate));
+        } else {
+            return Optional.empty();
+        }
+
     }
 
     /**
