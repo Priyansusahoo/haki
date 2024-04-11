@@ -1,4 +1,4 @@
-package com.priyansu.haki;
+package com.priyansu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
