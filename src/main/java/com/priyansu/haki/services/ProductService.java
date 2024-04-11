@@ -2,7 +2,10 @@ package com.priyansu.haki.services;
 
 import com.priyansu.haki.models.Product;
 import com.priyansu.haki.repository.ProductRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +45,7 @@ public class ProductService {
      * @param product An object of type Product that contains the details of the product to be created.
      * @return Returns the created Product object saved in the database.
      */
+    @Transactional
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
@@ -66,6 +70,7 @@ public class ProductService {
      * @return Returns the updated Product object after it has been saved to the repository.
      * If the product with the given id does not exist, this method may throw a NoSuchElementException.
      */
+    @Transactional
     public Optional<Product> updateProduct(Long id,Product productDetails) {
         Optional<Product> product = productRepository.findById(id);
 
@@ -78,7 +83,9 @@ public class ProductService {
 
             return Optional.of(productRepository.save(productToUpdate));
         } else {
-            return Optional.empty();
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Product with ID " + id + " not found"
+            );
         }
 
     }
@@ -87,6 +94,7 @@ public class ProductService {
      *
      * @param id The unique identifier of the product to be deleted. This should be a non-null Long value.
      */
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
