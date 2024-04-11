@@ -12,7 +12,7 @@ import lombok.*;
 
 @Data // Getter(), Setter(), toString(), equals(), hashCode()
 @Entity // Map the class to DB
-@Builder
+@Builder // Software Design Pattern : Builder design Pattern
 @NoArgsConstructor // create no args constructor
 @AllArgsConstructor // create all args constructor
 @Table(name = "product") // specifies the name of the database table associated with this entity
