@@ -4,6 +4,7 @@ import com.priyansu.haki.models.Product;
 import com.priyansu.haki.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -95,7 +96,15 @@ public class ProductService {
      * @param id The unique identifier of the product to be deleted. This should be a non-null Long value.
      */
     @Transactional
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public ResponseEntity<Boolean> deleteProduct(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+
+        if (product.isPresent()) {
+            productRepository.deleteById(id);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+
     }
 }
